@@ -20,16 +20,11 @@ router.get('/trips/vehicle', asyncHandler(TripController.getTripsByVehicle))
 
 router.use(errorHandler)
 
-
 app.use('/loc/api/v1', router)
-
-// createMiddleware('loc.yaml', app, (err, middleware) => {
-//   middleware.metadata(),
-//   middleware.CORS(),
-//   middleware.files(),
-//   middleware.parseRequest(),
-//   middleware.validateRequest(),
-//   middleware.mock()
-// })
+app.use('/loc/health', (req, res) => {
+  res.status(200).json({
+    result: 'ok'
+  })
+})
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
