@@ -15,8 +15,7 @@ const router = Router()
 router.use(logger)
 
 router.get('/drivers', asyncHandler(DriverController.getDriversByName))
-router.get('/trips/driver', asyncHandler(TripController.getTripsByDriver))
-router.get('/trips/vehicle', asyncHandler(TripController.getTripsByVehicle))
+router.get('/trips', asyncHandler(TripController.getTrips))
 
 router.use(errorHandler)
 

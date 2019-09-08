@@ -51,7 +51,7 @@ const Trip = {
    * @returns {Array} trip objects
    */
   getTripsByDriver: async (req, res, next) => {
-    if (!req.query.id) {
+    if (!req.query.driver_id) {
       return res.status(200).json({
         data: []
       })
@@ -64,7 +64,7 @@ const Trip = {
         text: `SELECT ${tripShowFields}
                FROM trip
                WHERE driver_id = $1`,
-        values: [req.query.id]
+        values: [req.query.driver_id]
       })
 
       if (trips.rowCount === 0) {
@@ -75,7 +75,7 @@ const Trip = {
         text: `SELECT id, firstname, lastname, mobile, profile_uri
                 FROM driver
                 WHERE id = $1`,
-        values: [req.query.id]
+        values: [req.query.driver_id]
       })
       const driver = drivers.rows[0] || {}
 
@@ -112,7 +112,7 @@ const Trip = {
    * @returns {Array} trip objects
    */
   getTripsByVehicle: async (req, res, next) => {
-    if (!req.query.reg) {
+    if (!req.query.vehicle_reg) {
       return res.status(200).json({
         data: []
       })
@@ -127,7 +127,7 @@ const Trip = {
         FROM vehicle
         WHERE reg_num = $1::text
       `,
-        values: [req.query.reg]
+        values: [req.query.vehicle_reg]
       })
 
       if (vehicleData.rowCount === 0) {
@@ -173,6 +173,25 @@ const Trip = {
       console.error(e)
       next(new expt.DBError(e))
     }
+  }
+}
+
+Trip.getTrips = async (req, res, next) => {
+  if (!req.query.vehicle_reg && !req.query.driver_id) {
+    console.log('here')
+    return res.status(200).json({
+      data: []
+    })
+  }
+
+  console.log('here')
+
+  // TODO: implement searching by both driver_id an reg
+  // Currently, reg will be ignore when driver_id is assgined
+  if (req.query.driver_id) {
+    return await Trip.getTripsByDriver(req, res, next)
+  } else {
+    return await Trip.getTripsByVehicle(req, res, next)
   }
 }
 

@@ -12,14 +12,14 @@ async function getDriversApi (name) {
 
 async function getTripsByDriverApi (id) {
   const resp = await fetch({
-    url: `${HOST}${apiPrefix}/trips/driver?id=${id}`
+    url: `${HOST}${apiPrefix}/trips?driver_id=${id}`
   })
   return resp && resp.data
 }
 
 async function getTripsByVehicleApi(reg) {
   const resp = await fetch({
-    url: `${HOST}${apiPrefix}/trips/vehicle?reg=${reg}`
+    url: `${HOST}${apiPrefix}/trips?vehicle_reg=${reg}`
   })
   return resp && resp.data
 }
