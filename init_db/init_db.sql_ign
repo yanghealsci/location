@@ -1,0 +1,81 @@
+
+-- --------------------------------------------------------
+-- This for init app db in localzdemo
+-- --------------------------------------------------------
+-- CREATE DATABASE app WITH ENCODING 'UTF-8';/*!40100 DEFAULT CHARACTER SET utf8 */;
+-- USE app;
+
+-- ALTER TABLE "geo_point" DROP CONSTRAINT "fk_geo_point_driver";
+-- ALTER TABLE "geo_point" DROP CONSTRAINT "fk_geo_point_vehicle";
+-- ALTER TABLE "trip" DROP CONSTRAINT "fk_trip_driver";
+-- ALTER TABLE "trip" DROP CONSTRAINT "fk_trip_vehicle";
+-- ALTER TABLE "geo_point" DROP CONSTRAINT "fk_geo_point_trip";
+-- 
+-- DROP INDEX "idx_firstname_lastname";
+-- DROP INDEX "idx_reg_num";
+-- 
+-- DROP TABLE "driver";
+-- DROP TABLE "vehicle";
+-- DROP TABLE "geo_point";
+-- DROP TABLE "route";
+-- DROP TABLE "trip";
+
+CREATE TABLE "driver" (
+"id" serial8 NOT NULL,
+"firstname" varchar(255) NOT NULL,
+"lastname" varchar(255) NOT NULL,
+"create_on" timestamp(0) NOT NULL DEFAULT NOW(),
+"last_login_on" timestamp(0) NOT NULL DEFAULT NOW(),
+"mobile" varchar NOT NULL,
+"profile_uri" varchar(255),
+PRIMARY KEY ("id") 
+)
+WITHOUT OIDS;
+CREATE INDEX "idx_firstname_lastname" ON "driver" USING btree ("firstname" ASC, "lastname" ASC);
+
+CREATE TABLE "vehicle" (
+"id" serial8 NOT NULL,
+"reg_num" varchar(255) NOT NULL,
+"create_on" timestamp(6) NOT NULL DEFAULT NOW(),
+"type" varchar(255),
+PRIMARY KEY ("id") 
+)
+WITHOUT OIDS;
+CREATE INDEX "idx_reg_num" ON "vehicle" USING btree ("reg_num" ASC);
+
+CREATE TABLE "geo_point" (
+"id" serial8 NOT NULL,
+"lng" float8 NOT NULL,
+"time" timestamp(6) NOT NULL,
+"create_on" timestamp(6) NOT NULL DEFAULT NOW(),
+"driver_id" int8,
+"vehicle_id" int8,
+"trip_id" int8,
+"lat" float8,
+PRIMARY KEY ("id") 
+)
+WITHOUT OIDS;
+
+CREATE TYPE status AS ENUM ('pending', 'start', 'end', 'cancel');
+
+CREATE TABLE "trip" (
+"id" serial8 NOT NULL,
+"create_on" timestamp(6) NOT NULL DEFAULT NOW(),
+"update_on" timestamp(0) NOT NULL DEFAULT NOW(),
+"start_on" timestamp(6) NOT NULL,
+"end_on" timestamp(6),
+"driver_id" int8 NOT NULL,
+"vehicle_id" int8 NOT NULL,
+"status" status NOT NULL DEFAULT 'pending',
+"start_loc" json,
+"end_loc" json,
+PRIMARY KEY ("id") 
+)
+WITHOUT OIDS;
+
+ALTER TABLE "geo_point" ADD CONSTRAINT "fk_geo_point_driver" FOREIGN KEY ("driver_id") REFERENCES "driver" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "geo_point" ADD CONSTRAINT "fk_geo_point_vehicle" FOREIGN KEY ("vehicle_id") REFERENCES "vehicle" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "trip" ADD CONSTRAINT "fk_trip_driver" FOREIGN KEY ("driver_id") REFERENCES "driver" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "trip" ADD CONSTRAINT "fk_trip_vehicle" FOREIGN KEY ("vehicle_id") REFERENCES "vehicle" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "geo_point" ADD CONSTRAINT "fk_geo_point_trip" FOREIGN KEY ("trip_id") REFERENCES "trip" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+

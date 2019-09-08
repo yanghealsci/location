@@ -1,0 +1,30 @@
+$border-color: #e8e8e8;
+$cell-padding: 10px;
+
+.wrapper {
+  width: 100%;
+  overflow: auto;
+  table {
+    thead {
+      background: #fafafa
+    }
+    tbody {
+      tr + tr {
+        border-top: 1px solid $border-color;
+      }
+      background: #fff;
+    }
+    thead, tbody {
+      border-bottom: 1px solid $border-color;
+    }
+    th, td {
+      padding: $cell-padding;
+    }
+  }
+  .empty {
+    td {
+      padding: 20px!important;
+      text-align: center;
+    }
+  }
+}

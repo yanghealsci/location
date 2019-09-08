@@ -1,0 +1,1 @@
+selete * from device

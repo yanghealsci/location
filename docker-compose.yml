@@ -1,0 +1,15 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+services:
+  db:
+    image: postgres:10-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      # POSTGRES_DB: localzdemo
+      # POSTGRES_USER: localzdemo
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+      - ./init_db:/docker-entrypoint-initdb.d
+    ports:
+      - "5433:5432"
