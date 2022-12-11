@@ -14,7 +14,7 @@
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "chai": "^4.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "mocha": "^6.2.0",
     "nodemon": "^1.19.2",
     "swagger-express-middleware": "^2.0.3"
